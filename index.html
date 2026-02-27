@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICPI Inc.</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo" style="cursor: pointer;" onclick="showSection('home')"><i class="ph ph-cpu" style="margin-right: 8px;"></i>ICPI Inc.</div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('home')"><i class="ph ph-house"></i> Home</a></li>
+                <li><a href="#" onclick="showSection('catalog')"><i class="ph ph-squares-four"></i> Catalog</a></li>
+                <li><a href="#" onclick="showSection('account')"><i class="ph ph-user"></i> Account</a></li>
+                <li><a href="#" onclick="showSection('invoices')"><i class="ph ph-package"></i> My Orders</a></li>
+                <li><a href="#" onclick="showSection('actual-invoices')"><i class="ph ph-receipt"></i> Invoices</a></li>
+                <li><button id="login-btn" onclick="toggleLoginModal()"><i class="ph ph-sign-in"></i> LOGIN</button></li>
+                <li><button id="logout-btn" onclick="logout()" style="display:none;"><i class="ph ph-sign-out"></i> LOGOUT</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- LOGIN POPUP -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleLoginModal()">&times;</span>
+            <h2>AUTHENTICATION</h2>
+            <input type="text" id="username-input" placeholder="Username">
+            <input type="password" id="password-input" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- HOME SECTION -->
+        <section id="home-section">
+            <div class="hero">
+                <h1 style="border:none; font-size: 2.5rem; margin-bottom: 10px;">Welcome to Bits & Bugs</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px; max-width: 600px;">
+                    Your premier destination for high-performance computing hardware. Explore our catalog of cutting-edge processors, neural GPUs, and cooling systems.
+                </p>
+                <button class="buy-btn" style="width: auto; padding: 12px 30px; font-size: 1.1rem; background: var(--accent); color: white;" onclick="showSection('catalog')">
+                    BROWSE FULL CATALOG
+                </button>
+            </div>
+
+            <h2 style="margin-top: 60px; margin-bottom: 20px; font-weight: 500; font-size: 1.5rem;">Featured Hardware</h2>
+            <div class="product-grid" id="featured-grid">
+                <!-- Featured products appear here -->
+            </div>
+        </section>
+        
+        <!-- CATALOG SECTION -->
+        <section id="catalog-section">
+            <h1><i class="ph ph-hard-drives"></i> HARDWARE CATALOG</h1>
+            <div style="margin-bottom: 20px; position: relative;">
+                <i class="ph ph-magnifying-glass" style="position: absolute; left: 14px; top: 14px; color: var(--text-secondary); font-size: 1.1rem;"></i>
+                <input type="text" id="catalog-search" placeholder="Search catalog..." style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border-color); border-radius: var(--radius); font-family: inherit; font-size: 0.95rem;" oninput="filterCatalog()">
+            </div>
+            <div class="status-bar">
+                <span><i class="ph ph-activity"></i> MARKET STATUS: <span class="live-indicator">LIVE</span></span>
+                <span id="clock"><i class="ph ph-clock"></i> 00:00:00</span>
+            </div>
+            <div class="product-grid" id="product-grid">
+                <!-- Products appear here -->
+            </div>
+        </section>
+
+        <!-- ACCOUNT SECTION -->
+        <section id="account-section" style="display:none;">
+            <h1><i class="ph ph-identification-card"></i> USER ACCOUNT</h1>
+            <div class="panel">
+                <h3>Profile Inquiry</h3>
+                <p id="account-id">ID: NOT LOGGED IN</p>
+                <p id="account-level">Access Level: GUEST</p>
+                <p id="account-status">Status: INACTIVE</p>
+                <br>
+                <h3>Customer Support</h3>
+                <textarea id="support-ticket-text" placeholder="Describe your issue..."></textarea>
+                <button class="buy-btn" onclick="submitTicket()">SUBMIT TICKET</button>
+            </div>
+        </section>
+
+        <!-- INVOICES / ORDERS SECTION -->
+        <section id="invoices-section" style="display:none;">
+            <h1><i class="ph ph-package"></i> MY ORDERS</h1>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>ORDER ID</th>
+                        <th>DATE</th>
+                        <th>ITEM</th>
+                        <th>PRICE</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-body">
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ACTUAL INVOICES SECTION -->
+        <section id="actual-invoices-section" style="display:none;">
+            <h1><i class="ph ph-receipt"></i> INVOICE CENTER</h1>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>INVOICE ID</th>
+                        <th>DATE</th>
+                        <th>RELATED ORDER</th>
+                        <th>AMOUNT</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="actual-invoice-body">
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ICPI Inc.</p>
+    </footer>
+
+    <!-- HIDDEN INVOICE TEMPLATE FOR PDF EXPORT -->
+    <div id="invoice-template" style="display: none; padding: 40px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111;">
+        <h1 style="font-size: 24px; border-bottom: 2px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;"><i class="ph ph-cpu" style="margin-right: 8px;"></i>ICPI Inc. Official Invoice</h1>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+            <div>
+                <strong>Billed To:</strong><br>
+                <span id="pdf-user">Guest</span><br>
+                ICPI Inc. Customer
+            </div>
+            <div style="text-align: right;">
+                <strong>Invoice Number:</strong> <span id="pdf-inv-num">#INV-0000</span><br>
+                <strong>Order Number:</strong> <span id="pdf-ord-num">#ORD-0000</span><br>
+                <strong>Date:</strong> <span id="pdf-date">2023-01-01</span>
+            </div>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #eaeaea;">
+                    <th style="padding: 12px; text-align: left;">Item Description</th>
+                    <th style="padding: 12px; text-align: right;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #eaeaea;">
+                    <td style="padding: 12px;" id="pdf-item">Product Name</td>
+                    <td style="padding: 12px; text-align: right; font-weight: bold;" id="pdf-price">₱0.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 50px; text-align: center; color: #666; font-size: 12px;">
+            Thank you for doing business with ICPI Inc.<br>
+            This is a computer-generated document. No signature is required.
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
