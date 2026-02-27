@@ -1,11 +1,11 @@
 // PRODUCT DATA
 const products = [
-    { id: 1, name: "Australian butterflies sweeping", price: 9450.00, stock: 12, image: "mix.jpg" },
-    { id: 2, name: "Papilio ulysses joesa matt", price: 7899.99, stock: 5, image: "blue.jpg" },
-    { id: 3, name: "Selenocosmia javanensis", price: 4299.50, stock: 40, image: "spider.jpg" },
-    { id: 4, name: "Graphium agamemnon", price: 3120.00, stock: 8, image: "green.jpg" },
-    { id: 5, name: "Catopsilia pomona", price: 4385.00, stock: 25, image: "orange.jpg" },
-    { id: 6, name: "Danaus genutia", price: 6745.00, stock: 100, image: "yellow.jpg" }
+    { id: 1, name: "Australian butterflies sweeping", price: 9450.00, stock: 12, image: "images/mix.jpg" },
+    { id: 2, name: "Papilio ulysses joesa matt", price: 7899.99, stock: 5, image: "images/blue.jpg" },
+    { id: 3, name: "Selenocosmia javanensis", price: 4299.50, stock: 40, image: "images/spider.jpg" },
+    { id: 4, name: "Graphium agamemnon", price: 3120.00, stock: 8, image: "images/green.jpg" },
+    { id: 5, name: "Catopsilia pomona", price: 4385.00, stock: 25, image: "images/orange.jpg" },
+    { id: 6, name: "Danaus genutia", price: 6745.00, stock: 100, image: "images/yellow.jpg" }
 ];
 
 let currentUser = null;
@@ -294,3 +294,4 @@ function downloadInvoice(invNum, ordNum, itemName, priceStr, dateStr) {
     });
 
 }
+
